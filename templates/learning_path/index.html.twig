@@ -9,7 +9,7 @@
     <div class="flex items-center justify-between">
         <p class="text-slate-500">Create guided learning journeys through SOPs</p>
         <a href="{{ path('app_learning_paths_new') }}" class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2.5 px-4 rounded-lg flex items-center gap-2 transition-colors">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            <iconify-icon icon="solar:add-circle-bold" width="20" height="20"></iconify-icon>
             Create Path
         </a>
     </div>
@@ -20,7 +20,7 @@
             <a href="{{ path('app_learning_paths_show', {id: path.id}) }}" class="block bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md hover:border-purple-200 transition-all group">
                 <div class="flex items-start justify-between mb-4">
                     <div class="p-3 bg-purple-50 rounded-lg text-purple-600 group-hover:bg-purple-100 transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        <iconify-icon icon="solar:book-bold-duotone" width="24" height="24"></iconify-icon>
                     </div>
                     <span class="text-xs font-medium text-slate-500">{{ path.items|length }} step{{ path.items|length != 1 ? 's' : '' }}</span>
                 </div>
@@ -42,11 +42,11 @@
             </a>
         {% else %}
             <div class="col-span-full bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
-                <svg class="w-12 h-12 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <iconify-icon icon="solar:book-bold-duotone" class="text-slate-300 mx-auto mb-4" width="48" height="48"></iconify-icon>
                 <h3 class="text-lg font-medium text-slate-800 mb-2">No learning paths yet</h3>
                 <p class="text-slate-500 mb-4">Create your first learning path to guide users through SOPs</p>
                 <a href="{{ path('app_learning_paths_new') }}" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <iconify-icon icon="solar:add-circle-bold" width="20" height="20"></iconify-icon>
                     Create Path
                 </a>
             </div>

@@ -8,7 +8,7 @@
     {# Breadcrumb & Actions #}
     <div class="flex items-center justify-between">
         <nav class="flex items-center gap-2 text-sm">
-            <a href="{{ path('app_learning_paths_index') }}" class="text-slate-500 hover:text-indigo-600">Learning Paths</a>
+            <a href="{{ path('app_learning_paths_index') }}" class="text-slate-500 hover:text-purple-600">Learning Paths</a>
             <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             <span class="text-slate-800 font-medium">{{ learning_path.title }}</span>
         </nav>
@@ -46,15 +46,15 @@
                                 {% for item in items %}
                                     <div class="relative flex gap-4">
                                         {# Step number #}
-                                        <div class="relative z-10 shrink-0 w-12 h-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-lg">
+                                        <div class="relative z-10 shrink-0 w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-lg shadow-lg">
                                             {{ item.position }}
                                         </div>
                                         
                                         {# Step content #}
-                                        <div class="flex-1 bg-slate-50 rounded-xl p-4 border border-slate-200 hover:border-indigo-200 transition-colors group">
+                                        <div class="flex-1 bg-slate-50 rounded-xl p-4 border border-slate-200 hover:border-purple-200 transition-colors group">
                                             <div class="flex items-start justify-between">
                                                 <div>
-                                                    <a href="{{ path('app_sops_show', {id: item.sop.id}) }}" class="text-lg font-semibold text-slate-800 hover:text-indigo-600 transition-colors">
+                                                    <a href="{{ path('app_sops_show', {id: item.sop.id}) }}" class="text-lg font-semibold text-slate-800 hover:text-purple-600 transition-colors">
                                                         {{ item.sop.title }}
                                                     </a>
                                                     <p class="text-sm text-slate-500 mt-1">{{ item.sop.description|slice(0, 100) }}{% if item.sop.description|length > 100 %}...{% endif %}</p>
@@ -104,19 +104,19 @@
                 <h3 class="text-sm font-semibold text-slate-800 uppercase tracking-wider mb-3">Add SOP</h3>
                 {% if available_sops|length > 0 %}
                     <form action="{{ path('app_learning_paths_add_sop', {id: learning_path.id}) }}" method="post" class="space-y-4">
-                        <select name="sop_id" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none text-sm" required>
+                        <select name="sop_id" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none text-sm" required>
                             <option value="">Select a SOP...</option>
                             {% for sop in available_sops %}
                                 <option value="{{ sop.id }}">{{ sop.title }}</option>
                             {% endfor %}
                         </select>
-                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                        <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                             Add to Path
                         </button>
                     </form>
                 {% else %}
-                    <p class="text-sm text-slate-500">No published SOPs available. <a href="{{ path('app_sops_new') }}" class="text-indigo-600 hover:text-indigo-700">Create one</a>.</p>
+                    <p class="text-sm text-slate-500">No published SOPs available. <a href="{{ path('app_sops_new') }}" class="text-purple-600 hover:text-purple-700">Create one</a>.</p>
                 {% endif %}
             </div>
 

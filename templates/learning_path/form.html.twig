@@ -7,7 +7,7 @@
 <div class="max-w-xl">
     {# Breadcrumb #}
     <nav class="flex items-center gap-2 text-sm mb-6">
-        <a href="{{ path('app_learning_paths_index') }}" class="text-slate-500 hover:text-indigo-600">Learning Paths</a>
+        <a href="{{ path('app_learning_paths_index') }}" class="text-slate-500 hover:text-purple-600">Learning Paths</a>
         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
         <span class="text-slate-800 font-medium">{{ learning_path ? 'Edit' : 'Create' }}</span>
     </nav>
@@ -25,7 +25,7 @@
                     name="title" 
                     id="title" 
                     value="{{ learning_path ? learning_path.title : '' }}"
-                    class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                    class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
                     placeholder="e.g., New Employee Onboarding"
                     required
                 >
@@ -40,7 +40,7 @@
                     name="description" 
                     id="description" 
                     rows="4"
-                    class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none resize-none"
+                    class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none resize-none"
                     placeholder="Describe what learners will achieve..."
                 >{{ learning_path ? learning_path.description : '' }}</textarea>
             </div>
@@ -52,7 +52,7 @@
                 </a>
                 <button 
                     type="submit" 
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-6 rounded-lg transition-colors"
+                    class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2.5 px-6 rounded-lg transition-colors"
                 >
                     {{ learning_path ? 'Update' : 'Create' }} Path
                 </button>

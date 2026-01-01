@@ -1,38 +1,89 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User Profile - {{ name }}{% endblock %}
+{% block title %}Users - SOPHIAX{% endblock %}
+{% block page_title %}Users{% endblock %}
 
 {% block body %}
-<style>
+<div class="space-y-6">
+    {# Header with Actions #}
+    <div class="flex items-center justify-between">
+        <p class="text-slate-500">Manage system users and their roles</p>
+        <a href="{{ path('app_user_new') }}" class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2.5 px-4 rounded-lg flex items-center gap-2 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+            Add User
+        </a>
+    </div>
 
-</style>
-
-<div class="user-container">
-    <div class="user-card">
-        <div class="avatar-wrapper">
-            {{ name|first|upper }}
-        </div>
-        
-        <div class="user-info">
-            <h1 class="user-name">{{ name }}</h1>
-            <div class="user-email">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                {{ email }}
+    {# Users Table #}
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        {% if users|length > 0 %}
+            <table class="w-full text-left">
+                <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+                    <tr>
+                        <th class="px-6 py-3 font-medium">User</th>
+                        <th class="px-6 py-3 font-medium">Email</th>
+                        <th class="px-6 py-3 font-medium">Role</th>
+                        <th class="px-6 py-3 font-medium">Joined</th>
+                        <th class="px-6 py-3 font-medium text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for user in users %}
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-linear-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white font-semibold text-sm">
+                                        {{ user.name|slice(0, 2)|upper }}
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800">{{ user.name }}</div>
+                                        <div class="text-xs text-slate-500">#{{ user.id }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-slate-600">{{ user.email }}</td>
+                            <td class="px-6 py-4">
+                                {% set role = user.roles[0]|default('ROLE_USER') %}
+                                {% if 'ADMIN' in role %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700">Admin</span>
+                                {% elseif 'MANAGER' in role %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">Manager</span>
+                                {% else %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">User</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-sm text-slate-500">
+                                {{ user.createdAt|date('M j, Y') }}
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ path('app_user_edit', {id: user.id}) }}" class="p-2 text-slate-500 hover:text-purple-600 hover:bg-slate-100 rounded-lg transition-colors" title="Edit">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                    </a>
+                                    {% if user != app.user %}
+                                        <form action="{{ path('app_user_delete', {id: user.id}) }}" method="post" class="inline" onsubmit="return confirm('Delete this user?')">
+                                            <button type="submit" class="p-2 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="text-center py-12">
+                <svg class="w-12 h-12 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <h3 class="text-lg font-medium text-slate-800 mb-2">No users yet</h3>
+                <p class="text-slate-500 mb-4">Add users to your system</p>
+                <a href="{{ path('app_user_new') }}" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                    Add User
+                </a>
             </div>
-            <span class="role-badge">{{ roles }}</span>
-        </div>
-
-        <div class="stats">
-            <div class="stat-item">
-                <span class="stat-value">#{{ id }}</span>
-                <span class="stat-label">User ID</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value">Active</span>
-                <span class="stat-label">Status</span>
-            </div>
-        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
-

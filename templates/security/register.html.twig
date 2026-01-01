@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'auth_base.html.twig' %}
 
 {% block title %}Register - SOPHIAX{% endblock %}
 
 {% block body %}
-<div class="min-h-[80vh] flex items-center justify-center">
+<div class="min-h-[80vh] flex items-center justify-center w-full">
     <div class="w-full max-w-md">
         {# Logo & Brand #}
         <div class="text-center mb-8">
@@ -41,8 +41,8 @@
                         name="name" 
                         id="name" 
                         value="{{ last_name|default('') }}"
-                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
-                        placeholder="John Doe"
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
+                        placeholder="Purple Orca"
                         required 
                         autofocus
                     >
@@ -58,7 +58,7 @@
                         name="email" 
                         id="email" 
                         value="{{ last_email|default('') }}"
-                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
                         placeholder="you@company.com"
                         required
                     >
@@ -73,7 +73,7 @@
                         type="password" 
                         name="password" 
                         id="password" 
-                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
                         placeholder="••••••••"
                         required
                     >
@@ -88,7 +88,7 @@
                         type="password" 
                         name="confirm_password" 
                         id="confirm_password" 
-                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
                         placeholder="••••••••"
                         required
                     >
@@ -97,7 +97,7 @@
                 {# Submit Button #}
                 <button 
                     type="submit" 
-                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors shadow-lg shadow-indigo-500/25"
+                    class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors shadow-lg shadow-purple-500/25"
                 >
                     Create Account
                 </button>
@@ -106,7 +106,7 @@
             {# Footer Links #}
             <div class="mt-6 text-center text-sm text-slate-500">
                 Already have an account? 
-                <a href="{{ path('app_login') }}" class="text-indigo-600 hover:text-indigo-700 font-medium">
+                <a href="{{ path('app_login') }}" class="text-purple-800 hover:text-purple-700 font-medium">
                     Sign in
                 </a>
             </div>

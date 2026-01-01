@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'auth_base.html.twig' %}
 
 {% block title %}Log in - SOPHIAX{% endblock %}
 
 {% block body %}
-<div class="min-h-[80vh] flex items-center justify-center">
+<div class="min-h-[80vh] flex items-center justify-center w-full">
     <div class="w-full max-w-md">
         {# Logo & Brand #}
         <div class="text-center mb-8">
@@ -39,7 +39,7 @@
                             name="_username" 
                             id="username" 
                             value="{{ last_username }}"
-                            class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                            class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
                             placeholder="you@company.com"
                             autocomplete="email" 
                             required 
@@ -56,7 +56,7 @@
                             type="password" 
                             name="_password" 
                             id="password" 
-                            class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                            class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
                             placeholder="••••••••"
                             autocomplete="current-password" 
                             required
@@ -66,7 +66,7 @@
                     {# Submit Button #}
                     <button 
                         type="submit" 
-                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors shadow-lg shadow-indigo-500/25"
+                        class="w-full bg-purple-800 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors shadow-lg shadow-indigo-500/25"
                     >
                         Sign In
                     </button>
@@ -75,7 +75,7 @@
                 {# Footer Links #}
                 <div class="mt-6 text-center text-sm text-slate-500">
                     Don't have an account? 
-                    <a href="{{ path('app_register') }}" class="text-indigo-600 hover:text-indigo-700 font-medium">
+                    <a href="{{ path('app_register') }}" class="text-purple-800 hover:text-purple-700 font-medium">
                         Create one
                     </a>
                 </div>

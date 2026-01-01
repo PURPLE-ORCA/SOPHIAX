@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}All SOPs - SOPHIAX{% endblock %}
+{% block page_title %}All SOPs{% endblock %}
+
+{% block body %}
+<div class="space-y-6">
+    {# Header with Actions #}
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="text-slate-500">Manage your Standard Operating Procedures</p>
+        </div>
+        <a href="{{ path('app_sops_new') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg flex items-center gap-2 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Create SOP
+        </a>
+    </div>
+
+    {# Filters #}
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+        <div class="flex flex-wrap items-center gap-4">
+            <div class="flex-1 min-w-200px">
+                <input type="text" placeholder="Search SOPs..." class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm">
+            </div>
+            <select class="px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm">
+                <option value="">All Categories</option>
+                <option>IT</option>
+                <option>HR</option>
+                <option>Safety</option>
+            </select>
+            <select class="px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm">
+                <option value="">All Status</option>
+                <option>Published</option>
+                <option>Draft</option>
+                <option>Review</option>
+            </select>
+        </div>
+    </div>
+
+    {# SOP Grid/Table #}
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        {% if sops|length > 0 %}
+            <table class="w-full text-left">
+                <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+                    <tr>
+                        <th class="px-6 py-3 font-medium">Title</th>
+                        <th class="px-6 py-3 font-medium">Category</th>
+                        <th class="px-6 py-3 font-medium">Status</th>
+                        <th class="px-6 py-3 font-medium">Difficulty</th>
+                        <th class="px-6 py-3 font-medium">Created By</th>
+                        <th class="px-6 py-3 font-medium text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for sop in sops %}
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4">
+                                <a href="{{ path('app_sops_show', {id: sop.id}) }}" class="font-medium text-slate-800 hover:text-indigo-600">
+                                    {{ sop.title }}
+                                </a>
+                                <p class="text-sm text-slate-500 truncate max-w-xs">{{ sop.description|slice(0, 60) }}{% if sop.description|length > 60 %}...{% endif %}</p>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
+                                    {{ sop.category.name|default('—') }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                {% if sop.status == 'published' %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">Published</span>
+                                {% elseif sop.status == 'draft' %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">Draft</span>
+                                {% elseif sop.status == 'review' %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">Review</span>
+                                {% else %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">{{ sop.status|capitalize }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-1">
+                                    {% for i in 1..5 %}
+                                        {% if i <= sop.difficulty|default(0) %}
+                                            <div class="w-2 h-2 rounded-full bg-indigo-500"></div>
+                                        {% else %}
+                                            <div class="w-2 h-2 rounded-full bg-slate-200"></div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-slate-600">
+                                {{ sop.createdBy.name|default('System') }}
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ path('app_sops_show', {id: sop.id}) }}" class="p-2 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded-lg transition-colors" title="View">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                    </a>
+                                    <a href="{{ path('app_sops_edit', {id: sop.id}) }}" class="p-2 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded-lg transition-colors" title="Edit">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="text-center py-12">
+                <svg class="w-12 h-12 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <h3 class="text-lg font-medium text-slate-800 mb-2">No SOPs yet</h3>
+                <p class="text-slate-500 mb-4">Get started by creating your first SOP</p>
+                <a href="{{ path('app_sops_new') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Create SOP
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

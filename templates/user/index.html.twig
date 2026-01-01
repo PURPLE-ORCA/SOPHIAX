@@ -1,20 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block title %}User Profile - {{ name }}{% endblock %}
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="user-container">
+    <div class="user-card">
+        <div class="avatar-wrapper">
+            {{ name|first|upper }}
+        </div>
+        
+        <div class="user-info">
+            <h1 class="user-name">{{ name }}</h1>
+            <div class="user-email">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                {{ email }}
+            </div>
+            <span class="role-badge">{{ roles }}</span>
+        </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/purple Orca/Documents/CLASS/ITS-SYMFONY/SOPHIAX/src/Controller/UserController.php</code></li>
-        <li>Your template at <code>C:/Users/purple Orca/Documents/CLASS/ITS-SYMFONY/SOPHIAX/templates/user/index.html.twig</code></li>
-    </ul>
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-value">#{{ id }}</span>
+                <span class="stat-label">User ID</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">Active</span>
+                <span class="stat-label">Status</span>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
+

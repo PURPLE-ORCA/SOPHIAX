@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ learning_path.title }} - SOPHIAX{% endblock %}
+{% block page_title %}{{ learning_path.title }}{% endblock %}
+
+{% block body %}
+<div class="space-y-6">
+    {# Breadcrumb & Actions #}
+    <div class="flex items-center justify-between">
+        <nav class="flex items-center gap-2 text-sm">
+            <a href="{{ path('app_learning_paths_index') }}" class="text-slate-500 hover:text-indigo-600">Learning Paths</a>
+            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <span class="text-slate-800 font-medium">{{ learning_path.title }}</span>
+        </nav>
+        <div class="flex items-center gap-2">
+            <a href="{{ path('app_learning_paths_edit', {id: learning_path.id}) }}" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2 px-4 rounded-lg flex items-center gap-2 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                Edit
+            </a>
+            <form action="{{ path('app_learning_paths_delete', {id: learning_path.id}) }}" method="post" class="inline" onsubmit="return confirm('Delete this learning path?')">
+                <button type="submit" class="bg-red-50 hover:bg-red-100 text-red-600 font-medium py-2 px-4 rounded-lg flex items-center gap-2 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    Delete
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {# Main Content: Roadmap #}
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-slate-800">Learning Roadmap</h2>
+                    <span class="text-sm text-slate-500">{{ items|length }} step{{ items|length != 1 ? 's' : '' }}</span>
+                </div>
+                
+                {% if items|length > 0 %}
+                    <div class="p-6">
+                        <div class="relative">
+                            {# Roadmap line #}
+                            <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-slate-200"></div>
+                            
+                            {# Steps #}
+                            <div class="space-y-6">
+                                {% for item in items %}
+                                    <div class="relative flex gap-4">
+                                        {# Step number #}
+                                        <div class="relative z-10 shrink-0 w-12 h-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-lg">
+                                            {{ item.position }}
+                                        </div>
+                                        
+                                        {# Step content #}
+                                        <div class="flex-1 bg-slate-50 rounded-xl p-4 border border-slate-200 hover:border-indigo-200 transition-colors group">
+                                            <div class="flex items-start justify-between">
+                                                <div>
+                                                    <a href="{{ path('app_sops_show', {id: item.sop.id}) }}" class="text-lg font-semibold text-slate-800 hover:text-indigo-600 transition-colors">
+                                                        {{ item.sop.title }}
+                                                    </a>
+                                                    <p class="text-sm text-slate-500 mt-1">{{ item.sop.description|slice(0, 100) }}{% if item.sop.description|length > 100 %}...{% endif %}</p>
+                                                    <div class="flex items-center gap-3 mt-2">
+                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-200 text-slate-600">
+                                                            {{ item.sop.category.name|default('No category') }}
+                                                        </span>
+                                                        <span class="text-xs text-slate-400">
+                                                            Difficulty: {{ item.sop.difficulty|default(1) }}/5
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form action="{{ path('app_learning_paths_remove_item', {id: learning_path.id, itemId: item.id}) }}" method="post" class="opacity-0 group-hover:opacity-100 transition-opacity" onsubmit="return confirm('Remove this SOP?')">
+                                                    <button type="submit" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Remove">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="p-12 text-center">
+                        <svg class="w-12 h-12 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        <h3 class="text-lg font-medium text-slate-800 mb-2">No steps yet</h3>
+                        <p class="text-slate-500">Add SOPs to this learning path using the panel on the right</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Sidebar: Add SOP #}
+        <div class="space-y-6">
+            {# Description #}
+            {% if learning_path.description %}
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h3 class="text-sm font-semibold text-slate-800 uppercase tracking-wider mb-3">About</h3>
+                <p class="text-slate-600">{{ learning_path.description }}</p>
+            </div>
+            {% endif %}
+
+            {# Add SOP Form #}
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h3 class="text-sm font-semibold text-slate-800 uppercase tracking-wider mb-3">Add SOP</h3>
+                {% if available_sops|length > 0 %}
+                    <form action="{{ path('app_learning_paths_add_sop', {id: learning_path.id}) }}" method="post" class="space-y-4">
+                        <select name="sop_id" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none text-sm" required>
+                            <option value="">Select a SOP...</option>
+                            {% for sop in available_sops %}
+                                <option value="{{ sop.id }}">{{ sop.title }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            Add to Path
+                        </button>
+                    </form>
+                {% else %}
+                    <p class="text-sm text-slate-500">No published SOPs available. <a href="{{ path('app_sops_new') }}" class="text-indigo-600 hover:text-indigo-700">Create one</a>.</p>
+                {% endif %}
+            </div>
+
+            {# Metadata #}
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h3 class="text-sm font-semibold text-slate-800 uppercase tracking-wider mb-3">Details</h3>
+                <dl class="space-y-3 text-sm">
+                    <div class="flex justify-between">
+                        <dt class="text-slate-500">Created By</dt>
+                        <dd class="text-slate-800 font-medium">{{ learning_path.createdBy.name|default('System') }}</dd>
+                    </div>
+                    <div class="flex justify-between">
+                        <dt class="text-slate-500">Created At</dt>
+                        <dd class="text-slate-800">{{ learning_path.createdAt|date('M j, Y') }}</dd>
+                    </div>
+                    <div class="flex justify-between">
+                        <dt class="text-slate-500">Total Steps</dt>
+                        <dd class="text-slate-800 font-medium">{{ items|length }}</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

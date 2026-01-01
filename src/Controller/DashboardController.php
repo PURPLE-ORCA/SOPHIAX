@@ -13,9 +13,9 @@ final class DashboardController extends AbstractController
     {
         return $this->render('dashboard/index.html.twig', [
             'stats' => [
-                'sops' => 24,
-                'users' => 12,
-                'categories' => 5,
+                'total_sops' => 24,
+                'total_users' => 12,
+                'published_sops' => 18,
                 'pending_reviews' => 3
             ],
             'recent_sops' => [
@@ -24,13 +24,15 @@ final class DashboardController extends AbstractController
                     'title' => 'Safety Protocols 2024',
                     'category' => 'Safety',
                     'status' => 'published',
+                    'author' => 'Sarah Connor',
                     'updated_at' => new \DateTime('-2 days')
                 ],
                 [
                     'id' => 2,
-                    'title' => 'onboarding Checklist (IT)',
+                    'title' => 'Onboarding Checklist (IT)',
                     'category' => 'HR',
                     'status' => 'draft',
+                    'author' => 'John Doe',
                     'updated_at' => new \DateTime('-1 hour')
                 ],
                 [
@@ -38,8 +40,22 @@ final class DashboardController extends AbstractController
                     'title' => 'Server Maintenance Guide',
                     'category' => 'IT',
                     'status' => 'published',
+                    'author' => 'Jane Smith',
                     'updated_at' => new \DateTime('-1 week')
+                ],
+                [
+                    'id' => 4,
+                    'title' => 'Q1 Marketing Strategy',
+                    'category' => 'Marketing',
+                    'status' => 'review',
+                    'author' => 'Mike Ross',
+                    'updated_at' => new \DateTime('-3 hours')
                 ]
+            ],
+            'my_progress' => [
+                ['title' => 'Fire Safety Basics', 'progress' => 100, 'status' => 'Completed'],
+                ['title' => 'Data Privacy 101', 'progress' => 45, 'status' => 'In Progress'],
+                ['title' => 'Company Values', 'progress' => 0, 'status' => 'Not Started'],
             ]
         ]);
     }

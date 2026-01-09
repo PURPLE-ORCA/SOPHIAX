@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,21 +32,21 @@ final class CategoryViewController extends AbstractController
     #[Route('/new', name: 'app_categories_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
-        if ($request->isMethod('POST')) {
-            $category = new Category();
-            $category->setName($request->request->get('name'));
-            $category->setDescription($request->request->get('description'));
+ $category = new Category();
+    $form = $this->createForm(CategoryType::class, $category);
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->entityManager->persist($category);
-            $this->entityManager->flush();
+        
+        $this->entityManager->persist($category);
+        $this->entityManager->flush();
 
-            $this->addFlash('success', 'Category created successfully!');
-            return $this->redirectToRoute('app_categories_index');
-        }
-
-        return $this->render('category/form.html.twig', [
-            'category' => null,
-        ]);
+        return $this->redirectToRoute('app_categories_index');
+    }
+    return $this->render('category/form.html.twig', [
+        'form' => $form,
+        'category' => $category,
+    ]);
     }
 
     #[Route('/{id}/edit', name: 'app_categories_edit', methods: ['GET', 'POST'])]
@@ -57,10 +58,10 @@ final class CategoryViewController extends AbstractController
             throw $this->createNotFoundException('Category not found');
         }
 
-        if ($request->isMethod('POST')) {
-            $category->setName($request->request->get('name'));
-            $category->setDescription($request->request->get('description'));
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Category updated successfully!');
@@ -68,6 +69,7 @@ final class CategoryViewController extends AbstractController
         }
 
         return $this->render('category/form.html.twig', [
+            'form' => $form,
             'category' => $category,
         ]);
     }

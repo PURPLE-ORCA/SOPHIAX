@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Tag;
+use App\Form\TagType;
 use App\Repository\TagRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,10 +32,11 @@ final class TagViewController extends AbstractController
     #[Route('/new', name: 'app_tags_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
-        if ($request->isMethod('POST')) {
-            $tag = new Tag();
-            $tag->setName($request->request->get('name'));
+        $tag = new Tag();
+        $form = $this->createForm(TagType::class, $tag);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->persist($tag);
             $this->entityManager->flush();
 
@@ -43,7 +45,8 @@ final class TagViewController extends AbstractController
         }
 
         return $this->render('tag/form.html.twig', [
-            'tag' => null,
+            'form' => $form,
+            'tag' => $tag,
         ]);
     }
 
@@ -56,8 +59,10 @@ final class TagViewController extends AbstractController
             throw $this->createNotFoundException('Tag not found');
         }
 
-        if ($request->isMethod('POST')) {
-            $tag->setName($request->request->get('name'));
+        $form = $this->createForm(TagType::class, $tag);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Tag updated successfully!');
@@ -65,6 +70,7 @@ final class TagViewController extends AbstractController
         }
 
         return $this->render('tag/form.html.twig', [
+            'form' => $form,
             'tag' => $tag,
         ]);
     }

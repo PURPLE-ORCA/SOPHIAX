@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\LearningPath;
 use App\Entity\LearningPathItem;
+use App\Form\LearningPathType;
 use App\Repository\LearningPathRepository;
 use App\Repository\SOPRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,10 +35,11 @@ final class LearningPathViewController extends AbstractController
     #[Route('/new', name: 'app_learning_paths_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
-        if ($request->isMethod('POST')) {
-            $learningPath = new LearningPath();
-            $learningPath->setTitle($request->request->get('title'));
-            $learningPath->setDescription($request->request->get('description'));
+        $learningPath = new LearningPath();
+        $form = $this->createForm(LearningPathType::class, $learningPath);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $learningPath->setCreatedAt(new \DateTimeImmutable());
             $learningPath->setCreatedBy($this->getUser());
 
@@ -49,6 +51,7 @@ final class LearningPathViewController extends AbstractController
         }
 
         return $this->render('learning_path/form.html.twig', [
+            'form' => $form,
             'learning_path' => null,
         ]);
     }
@@ -85,10 +88,10 @@ final class LearningPathViewController extends AbstractController
             throw $this->createNotFoundException('Learning Path not found');
         }
 
-        if ($request->isMethod('POST')) {
-            $learningPath->setTitle($request->request->get('title'));
-            $learningPath->setDescription($request->request->get('description'));
+        $form = $this->createForm(LearningPathType::class, $learningPath);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Learning Path updated successfully!');
@@ -96,6 +99,7 @@ final class LearningPathViewController extends AbstractController
         }
 
         return $this->render('learning_path/form.html.twig', [
+            'form' => $form,
             'learning_path' => $learningPath,
         ]);
     }

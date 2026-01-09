@@ -14,95 +14,59 @@
 
     {# Form Card #}
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-        <form method="post" class="space-y-6">
+        {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
             {# Title #}
             <div>
-                <label for="title" class="block text-sm font-medium text-slate-700 mb-2">
-                    Title <span class="text-red-500">*</span>
-                </label>
-                <input 
-                    type="text" 
-                    name="title" 
-                    id="title" 
-                    value="{{ sop ? sop.title : '' }}"
-                    class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
-                    placeholder="Enter SOP title"
-                    required
-                >
+                {{ form_label(form.title, null, {'label_attr': {'class': 'block text-sm font-medium text-slate-700 mb-2'}}) }}
+                <span class="text-red-500">*</span>
+                {{ form_widget(form.title) }}
+                {{ form_errors(form.title) }}
             </div>
 
             {# Description #}
             <div>
-                <label for="description" class="block text-sm font-medium text-slate-700 mb-2">
-                    Description <span class="text-red-500">*</span>
-                </label>
-                <textarea 
-                    name="description" 
-                    id="description" 
-                    rows="6"
-                    class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none resize-none"
-                    placeholder="Describe the purpose and scope of this SOP..."
-                    required
-                >{{ sop ? sop.description : '' }}</textarea>
+                {{ form_label(form.description, null, {'label_attr': {'class': 'block text-sm font-medium text-slate-700 mb-2'}}) }}
+                <span class="text-red-500">*</span>
+                {{ form_widget(form.description) }}
+                {{ form_errors(form.description) }}
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {# Category #}
                 <div>
-                    <label for="category" class="block text-sm font-medium text-slate-700 mb-2">
-                        Category
-                    </label>
-                    <select 
-                        name="category" 
-                        id="category" 
-                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
-                    >
-                        <option value="">Select a category</option>
-                        {% for category in categories %}
-                            <option value="{{ category.id }}" {{ sop and sop.category and sop.category.id == category.id ? 'selected' : '' }}>
-                                {{ category.name }}
-                            </option>
-                        {% endfor %}
-                    </select>
+                    {{ form_label(form.category, null, {'label_attr': {'class': 'block text-sm font-medium text-slate-700 mb-2'}}) }}
+                    {{ form_widget(form.category) }}
+                    {{ form_errors(form.category) }}
                 </div>
 
                 {# Department #}
                 <div>
-                    <label for="department" class="block text-sm font-medium text-slate-700 mb-2">
-                        Department
-                    </label>
-                    <input 
-                        type="text" 
-                        name="department" 
-                        id="department" 
-                        value="{{ sop ? sop.department : '' }}"
-                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
-                        placeholder="e.g., IT, HR, Operations"
-                    >
+                    {{ form_label(form.department, null, {'label_attr': {'class': 'block text-sm font-medium text-slate-700 mb-2'}}) }}
+                    {{ form_widget(form.department) }}
+                    {{ form_errors(form.department) }}
                 </div>
             </div>
 
             {# Difficulty #}
             <div>
-                <label class="block text-sm font-medium text-slate-700 mb-2">
-                    Difficulty Level
-                </label>
+                {{ form_label(form.difficulty, null, {'label_attr': {'class': 'block text-sm font-medium text-slate-700 mb-2'}}) }}
                 <div class="flex items-center gap-4">
-                    {% for i in 1..5 %}
+                    {% for child in form.difficulty %}
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input 
-                                type="radio" 
-                                name="difficulty" 
-                                value="{{ i }}" 
-                                {{ sop and sop.difficulty == i ? 'checked' : '' }}
-                                {{ not sop and i == 1 ? 'checked' : '' }}
-                                class="text-purple-600 focus:ring-purple-500"
-                            >
-                            <span class="text-sm text-slate-600">{{ i }}</span>
+                            {{ form_widget(child, {'attr': {'class': 'text-purple-600 focus:ring-purple-500'}}) }}
+                            <span class="text-sm text-slate-600">{{ child.vars.label }}</span>
                         </label>
                     {% endfor %}
                 </div>
+                {{ form_errors(form.difficulty) }}
                 <p class="text-xs text-slate-500 mt-1">1 = Easy, 5 = Expert</p>
+            </div>
+
+            {# Tags #}
+            <div>
+                {{ form_label(form.tags, null, {'label_attr': {'class': 'block text-sm font-medium text-slate-700 mb-2'}}) }}
+                {{ form_widget(form.tags) }}
+                {{ form_errors(form.tags) }}
             </div>
 
             {# Actions #}
@@ -117,7 +81,7 @@
                     {{ sop ? 'Update SOP' : 'Create SOP' }}
                 </button>
             </div>
-        </form>
+        {{ form_end(form) }}
     </div>
 </div>
 {% endblock %}

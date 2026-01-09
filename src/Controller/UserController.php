@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,17 +34,20 @@ final class UserController extends AbstractController
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
-        if ($request->isMethod('POST')) {
-            $user = new User();
-            $user->setName($request->request->get('name'));
-            $user->setEmail($request->request->get('email'));
-            $user->setRoles([$request->request->get('role', 'ROLE_USER')]);
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user, ['is_edit' => false]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $user->setCreatedAt(new \DateTimeImmutable());
 
-            $hashedPassword = $this->passwordHasher->hashPassword(
-                $user,
-                $request->request->get('password')
-            );
+            // Handle role
+            $role = $form->get('role')->getData();
+            $user->setRoles([$role]);
+
+            // Hash password
+            $plainPassword = $form->get('plainPassword')->getData();
+            $hashedPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
             $user->setPassword($hashedPassword);
 
             $this->entityManager->persist($user);
@@ -54,7 +58,8 @@ final class UserController extends AbstractController
         }
 
         return $this->render('user/form.html.twig', [
-            'user' => null,
+            'form' => $form,
+            'user' => $user,
         ]);
     }
 
@@ -67,15 +72,23 @@ final class UserController extends AbstractController
             throw $this->createNotFoundException('User not found');
         }
 
-        if ($request->isMethod('POST')) {
-            $user->setName($request->request->get('name'));
-            $user->setEmail($request->request->get('email'));
-            $user->setRoles([$request->request->get('role', 'ROLE_USER')]);
+        $form = $this->createForm(UserType::class, $user, ['is_edit' => true]);
+
+        // Pre-set the role dropdown value
+        $currentRole = $user->getRoles()[0] ?? 'ROLE_USER';
+        $form->get('role')->setData($currentRole);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle role
+            $role = $form->get('role')->getData();
+            $user->setRoles([$role]);
 
             // Only update password if provided
-            $newPassword = $request->request->get('password');
-            if ($newPassword) {
-                $hashedPassword = $this->passwordHasher->hashPassword($user, $newPassword);
+            $plainPassword = $form->get('plainPassword')->getData();
+            if ($plainPassword) {
+                $hashedPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
                 $user->setPassword($hashedPassword);
             }
 
@@ -86,6 +99,7 @@ final class UserController extends AbstractController
         }
 
         return $this->render('user/form.html.twig', [
+            'form' => $form,
             'user' => $user,
         ]);
     }

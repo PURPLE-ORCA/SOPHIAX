@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\SOP;
+use App\Form\SOPType;
 use App\Repository\SOPRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,24 +34,17 @@ final class SOPViewController extends AbstractController
     #[Route('/new', name: 'app_sops_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
-        if ($request->isMethod('POST')) {
-            $sop = new SOP();
-            $sop->setTitle($request->request->get('title'));
-            $sop->setDescription($request->request->get('description'));
-            $sop->setDepartment($request->request->get('department'));
-            $sop->setDifficulty((int) $request->request->get('difficulty', 1));
+        $sop = new SOP();
+        $sop->setDifficulty(1); // Default value
+        
+        $form = $this->createForm(SOPType::class, $sop);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $sop->setStatus('draft');
             $sop->setVersionNumber(1);
             $sop->setCreatedAt(new \DateTimeImmutable());
             $sop->setCreatedBy($this->getUser());
-
-            $categoryId = $request->request->get('category');
-            if ($categoryId) {
-                $category = $this->categoryRepository->find($categoryId);
-                if ($category) {
-                    $sop->setCategory($category);
-                }
-            }
 
             $this->entityManager->persist($sop);
             $this->entityManager->flush();
@@ -60,8 +54,8 @@ final class SOPViewController extends AbstractController
         }
 
         return $this->render('sop/form.html.twig', [
+            'form' => $form,
             'sop' => null,
-            'categories' => $this->categoryRepository->findAll(),
         ]);
     }
 
@@ -88,20 +82,11 @@ final class SOPViewController extends AbstractController
             throw $this->createNotFoundException('SOP not found');
         }
 
-        if ($request->isMethod('POST')) {
-            $sop->setTitle($request->request->get('title'));
-            $sop->setDescription($request->request->get('description'));
-            $sop->setDepartment($request->request->get('department'));
-            $sop->setDifficulty((int) $request->request->get('difficulty', 1));
-            $sop->setUpdatedAt(new \DateTimeImmutable());
+        $form = $this->createForm(SOPType::class, $sop);
+        $form->handleRequest($request);
 
-            $categoryId = $request->request->get('category');
-            if ($categoryId) {
-                $category = $this->categoryRepository->find($categoryId);
-                if ($category) {
-                    $sop->setCategory($category);
-                }
-            }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sop->setUpdatedAt(new \DateTimeImmutable());
 
             $this->entityManager->flush();
 
@@ -110,8 +95,8 @@ final class SOPViewController extends AbstractController
         }
 
         return $this->render('sop/form.html.twig', [
+            'form' => $form,
             'sop' => $sop,
-            'categories' => $this->categoryRepository->findAll(),
         ]);
     }
 
